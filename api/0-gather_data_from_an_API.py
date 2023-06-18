@@ -6,29 +6,25 @@ import sys
 
 if __name__ == '__main__':
 
-    api_url = 'https://jsonplaceholder.typicode.com'
-    employee_id = sys.argv[1]
+    emp_id = sys.argv[1]
 
-    employee_url = f'{api_url}/users/{employee_id}'
-    response = requests.get(employee_url)
-    employee_data = response.json()
-    employee_name = employee_data['name']
+    api_url = "https://jsonplaceholder.typicode.com"
 
-    todos_url = f'{api_url}/users/{employee_id}/todos'
-    response = requests.get(todos_url)
-    todos_data = response.json()
+    url = f"{api_url}/users/{emp_id}/todos"
+    resp = requests.get(url)
+    emp_tasks = resp.json()
 
-    completed_tasks = 0
-    total_tasks = len(todos_data)
+    url = f"{api_url}/users/{emp_id}"
+    resp = requests.get(url)
+    emp_info = resp.json()
 
-    completed_titles = []
+    emp_name = emp_info.get("name")
+    comp_tasks = [task["title"] for task in emp_tasks if task["completed"]]
+    num_tasks = len(comp_tasks)
+    total_tasks = len(emp_tasks)
 
-    for todo in todos_data:
-        if todo['completed']:
-            completed_tasks += 1
-            completed_titles.append(todo['title'])
+    print("Employee {} is done with tasks({}/{}):".format(
+        emp_name, num_tasks, total_tasks))
 
-    print(f"Employee {employee_name} is done with tasks({completed_tasks}/\
-        {total_tasks}):")
-    for title in completed_titles:
-        print(f"\t{title}")
+    for task in comp_tasks:
+        print(f"\t {task}")
