@@ -2,38 +2,35 @@
 """Gather data from an API."""
 
 import requests
-import sys
 import json
 
+if __name__ == '__main__':
 
-def gather_data(emp_id):
     api_url = "https://jsonplaceholder.typicode.com"
 
-    url = f"{api_url}/users/{emp_id}/todos"
+    url = f"{api_url}/users"
     resp = requests.get(url)
-    emp_tasks = resp.json()
+    users = resp.json()
 
-    url = f"{api_url}/users/{emp_id}"
-    resp = requests.get(url)
-    emp_info = resp.json()
+    all_todos = {}
 
-    emp_todos = []
+    for user in users:
+        user_id = user['id']
 
-    for task in emp_tasks:
-        emp_todos.append({
-            'task': task.get('title'),
-            'completed': task.get('completed'),
-            'username': emp_info.get('username')
-        })
+        url = f"{api_url}/users/{user_id}/todos"
+        resp = requests.get(url)
+        todos = resp.json()
 
-    return emp_todos
+        emp_todos = [
+            {
+                'task': task.get('title'),
+                'completed': task.get('completed'),
+                'username': user.get('username'),
+            }
+            for task in todos
+        ]
+        all_todos[user_id] = emp_todos
 
-
-if __name__ == '__main__':
-    users = [gather_data(emp_id) for emp_id in range(1, 11)]
-    # Create dictionary with user IDs as keys and tasks as values
-    all_users_tasks = dict(enumerate(users, start=1))
-
-    # Save the dictionary as JSON
-    with open("todo_all_employees.json", mode="w") as f:
-        json.dump(all_users_tasks, f)
+    file_name = "todo_all_employees.json"
+    with open(file_name, mode="w") as f:
+        json.dump(all_todos, f)
