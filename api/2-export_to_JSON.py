@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Gather data from an API."""
 
+
 import requests
 import sys
 import json
@@ -19,14 +20,14 @@ if __name__ == '__main__':
     resp = requests.get(url)
     emp_info = resp.json()
 
-    emp_todos = []
-
-    for task in emp_tasks:
-        emp_todos.append({
+    emp_todos = [
+        {
             'task': task.get('title'),
             'completed': task.get('completed'),
-            'username': emp_info.get('username')})
-
+            'username': emp_info.get('username'),
+        }
+        for task in emp_tasks
+    ]
     output_json = {emp_id: emp_todos}
-    with open(f"{emp_id}.json", mode="w", newline="") as f:
+    with open(f"{emp_id}.json", mode="w") as f:
         json.dump(output_json, f)
