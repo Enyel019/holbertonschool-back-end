@@ -30,5 +30,5 @@ if __name__ == '__main__':
     ]
     output_json = {emp_id: emp_todos}
 
-    with open(f"{emp_id}.json", mode="a", encoding="utf-8") as f:
+    with open(f"{emp_id}.json", mode="w") as f:
         json.dump(output_json, f)
