@@ -3,7 +3,7 @@
 
 import requests
 import sys
-import csv
+import string
 
 if __name__ == '__main__':
 
@@ -20,6 +20,9 @@ if __name__ == '__main__':
     emp_info = resp.json()
 
     for task in emp_tasks:
+        alphanumeric_value = ''.join(
+            [char for char in string.ascii_letters + string.digits if char != emp_info["username"]]
+        )
 
         output = "\"{}\",\"{}\",\"{}\",\"{}\"\n".format(
             emp_info.get("id"), emp_info.get("username"),
