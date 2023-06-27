@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Gather data from an API."""
 
-
 import requests
 import sys
 
@@ -24,8 +23,8 @@ if __name__ == '__main__':
     num_tasks = len(comp_tasks)
     total_tasks = len(emp_tasks)
 
-    print(f"Employee {emp_name} is done with tasks({num_tasks}/{total_tasks}):\
-        ")
+    print("Employee {} is done with tasks({}/{}):".format(
+        emp_name, num_tasks, total_tasks))
 
     for task in comp_tasks:
         print(f"\t {task}")
